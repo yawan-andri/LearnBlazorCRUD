@@ -1,0 +1,38 @@
+﻿@page "/students"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using LearnBlazorCRUD.Models
+@using LearnBlazorCRUD.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<LearnBlazorCRUD.Data.LearnBlazorCRUDContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="students/create" class="btn btn-outline-success btn-sm">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Student">
+    <PropertyColumn Property="student => student.Name" />
+    <PropertyColumn Property="student => student.Age" />
+    <PropertyColumn Property="student => student.BirthDate" Title="Date of Birth" Format="yyyy-MM-dd"/>
+
+    <TemplateColumn Context="student" Title="Action">
+        <a href="@($"students/edit?id={student.Id}")" class="btn btn-outline-warning btn-sm">Edit</a>
+        <a href="@($"students/details?id={student.Id}")" class="btn btn-outline-info btn-sm">Details</a>
+        <a href="@($"students/delete?id={student.Id}")" class="btn btn-outline-danger btn-sm">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private LearnBlazorCRUDContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}
