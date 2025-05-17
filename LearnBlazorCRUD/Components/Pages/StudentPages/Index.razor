@@ -5,34 +5,55 @@
 @using LearnBlazorCRUD.Data
 @implements IAsyncDisposable
 @inject IDbContextFactory<LearnBlazorCRUD.Data.LearnBlazorCRUDContext> DbFactory
+@attribute [StreamRendering]
 
-<PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<PageTitle>Student</PageTitle>
 
-<p>
-    <a href="students/create" class="btn btn-outline-success btn-sm">Create New</a>
-</p>
+<h1>Student List</h1>
 
-<QuickGrid Class="table" Items="context.Student">
-    <PropertyColumn Property="student => student.Name" />
-    <PropertyColumn Property="student => student.Age" />
-    <PropertyColumn Property="student => student.BirthDate" Title="Date of Birth" Format="yyyy-MM-dd"/>
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+} 
+else
+{
+    <p>
+        <a href="students/create" class="btn btn-outline-success btn-sm">Create New</a>
+    </p>
 
-    <TemplateColumn Context="student" Title="Action">
-        <a href="@($"students/edit?id={student.Id}")" class="btn btn-outline-warning btn-sm">Edit</a>
-        <a href="@($"students/details?id={student.Id}")" class="btn btn-outline-info btn-sm">Details</a>
-        <a href="@($"students/delete?id={student.Id}")" class="btn btn-outline-danger btn-sm">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+    <QuickGrid Class="table" Items="context.Student">
+        <PropertyColumn Property="student => student.Name" />
+        <PropertyColumn Property="student => student.Age" />
+        <PropertyColumn Property="student => student.BirthDate" Title="Date of Birth" Format="yyyy-MM-dd" />
+
+        <TemplateColumn Context="student" Title="Action">
+            <a href="@($"students/edit?id={student.Id}")" class="btn btn-outline-warning btn-sm">Edit</a>
+            <a href="@($"students/delete?id={student.Id}")" class="btn btn-outline-danger btn-sm">Delete</a>
+            <a href="@($"students/details?id={student.Id}")" class="btn btn-outline-info btn-sm">Details</a>
+        </TemplateColumn>
+    </QuickGrid>
+}
+
 
 @code {
     private LearnBlazorCRUDContext context = default!;
+    private List<Student>? students;
 
-    protected override void OnInitialized()
+    // protected override void OnInitialized()
+    // {
+    //     context = DbFactory.CreateDbContext();
+    // }
+
+    protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(500);
         context = DbFactory.CreateDbContext();
+        students = await context.Student.ToListAsync();
     }
 
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+    public async ValueTask DisposeAsync()
+    {
+        await context.DisposeAsync();
+    }
 }

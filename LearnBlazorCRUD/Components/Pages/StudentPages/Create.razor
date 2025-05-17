@@ -7,9 +7,8 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
+<h1>Create Student</h1>
 
-<h2>Student</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,28 +16,31 @@
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="   alert"/>
             <div class="mb-3">
-                <label for="name" class="form-label">Name:</label> 
+                <label for="name" class="form-label">Name</label> 
                 <InputText id="name" @bind-Value="Student.Name" class="form-control" /> 
                 <ValidationMessage For="() => Student.Name" class="text-danger" /> 
             </div>        
             <div class="mb-3">
-                <label for="age" class="form-label">Age:</label> 
+                <label for="age" class="form-label">Age</label> 
                 <InputNumber id="age" @bind-Value="Student.Age" class="form-control" /> 
                 <ValidationMessage For="() => Student.Age" class="text-danger" /> 
             </div>        
             <div class="mb-3">
-                <label for="birthdate" class="form-label">BirthDate:</label> 
+                <label for="birthdate" class="form-label">Birth of Date</label> 
                 <InputDate id="birthdate" @bind-Value="Student.BirthDate" class="form-control" /> 
                 <ValidationMessage For="() => Student.BirthDate" class="text-danger" /> 
-            </div>        
-            <button type="submit" class="btn btn-primary">Create</button>
+            </div>    
+            <div>
+                <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>
+                <a href="/students" class="btn btn-outline-info btn-sm">Cancel</a>
+            </div>
         </EditForm>
     </div>
 </div>
 
-<div>
+@* <div>
     <a href="/students">Back to List</a>
-</div>
+</div> *@
 
 @code {
     [SupplyParameterFromForm]
